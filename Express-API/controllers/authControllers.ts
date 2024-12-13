@@ -1,8 +1,7 @@
 import { Request,Response } from "express";
 import Joi from "joi";
-import { AuthenticatedUser } from "../types";
 import { register } from "../service/auth.service";
-import { access } from "fs";
+
 const schema = Joi.object({
      fullName: Joi.string().required(),
      email: Joi.string().email().required(),
