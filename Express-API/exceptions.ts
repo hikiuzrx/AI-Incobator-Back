@@ -1,11 +1,4 @@
-import { User } from "@prisma/client";
-import { Request } from "express";
-type AuthenticatedRequest = Request &{
-     userId?:number | string
-     refreshToken? :string
-     accessToken? :string
-}
-class BaseException extends Error {
+export class BaseException extends Error {
      public statusCode: number;
      public details?: any;
    
@@ -16,27 +9,27 @@ class BaseException extends Error {
        Error.captureStackTrace(this, this.constructor);
      }
    }
-   class NotFoundException extends BaseException {
+   export class NotFoundException extends BaseException {
      constructor(resource: string, details?: any) {
        super(`${resource} not found.`, 404, details);
      }
    }
-   class ValidationException extends BaseException {
+   export class ValidationException extends BaseException {
      constructor(errors: any) {
        super('Validation failed.', 400, errors);
      }
    }
-   class UnauthorizedException extends BaseException {
+   export class UnauthorizedException extends BaseException {
      constructor(details?: any) {
        super('Unauthorized access.', 401, details);
      }
    }
-   class ForbiddenException extends BaseException {
+  export class ForbiddenException extends BaseException {
      constructor(details?: any) {
        super('Access forbidden.', 403, details);
      }
    }
-   class ConflictException extends BaseException {
+   export class ConflictException extends BaseException {
      constructor(resource: string, details?: any) {
        super(`${resource} already exists.`, 409, details);
      }
@@ -60,11 +53,4 @@ class BaseException extends Error {
        this.originalError = originalError;
        Error.captureStackTrace(this, this.constructor);
      }
-   }  
-   type AuthenticatedUser = {
-     userId: number
-     fullName : string,
-     usernme:string,
-     email:string,
-     accessToken :string
    }

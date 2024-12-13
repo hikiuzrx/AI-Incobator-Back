@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { configDotenv } from 'dotenv';
-import { EnvMissingException, TokenGenerationException } from '../types';
+import { EnvMissingException, TokenGenerationException } from '../exceptions';
 
 configDotenv();
 
 // Function to generate an access token
 const generateAcessToken = (id: number): string | undefined => {
-  const secret: string | undefined = process.env.ACESS_TOKEN_SECRET;
+  const secret: string | undefined = process.env.ACCESS_TOKEN_SECRET;
 
   if (!secret) {
     throw new EnvMissingException('Access Token Secret');
