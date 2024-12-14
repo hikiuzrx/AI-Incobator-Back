@@ -3,6 +3,7 @@ import { Register,Login } from "../controllers/authControllers";
 import { Logout }from '../controllers/authControllers'
 import { authMiddleware } from "../middlewares/authValidator";
 const authRouter:Router = express.Router()
+
 /**
  * @swagger
  * /auth/register:
@@ -25,20 +26,25 @@ const authRouter:Router = express.Router()
  *               id:
  *                 type: string
  *                 description: Unique identifier for the user.
+ *                 example: "12345"
  *               fullName:
  *                 type: string
  *                 description: Full name of the user.
+ *                 example: "John Doe"
  *               username:
  *                 type: string
  *                 description: User's username.
+ *                 example: "johndoe"
  *               email:
  *                 type: string
  *                 format: email
  *                 description: Email address of the user.
+ *                 example: "john.doe@example.com"
  *               password:
  *                 type: string
  *                 format: password
  *                 description: Password for the user account.
+ *                 example: "password123"
  *     responses:
  *       '201':
  *         description: User created and authenticated.
@@ -49,9 +55,6 @@ const authRouter:Router = express.Router()
  *       '500':
  *         description: Server-related error, such as token generation failure or configuration issues.
  */
-
-
-
 authRouter.post('/register',Register)
 /**
  * @swagger
@@ -79,7 +82,7 @@ authRouter.post('/register',Register)
  *                   description: User password.
  *                   example: "SecureP@ssw0rd"
  *       responses:
- *         '201':
+ *         '200':
  *           description: Successful login.
  *           content:
  *             application/json:
@@ -139,53 +142,52 @@ authRouter.post('/register',Register)
  *                     description: Details about the server error.
  *                     example: "Internal server error."
  */
-
 authRouter.post('/login',Login)
 /**
  * @swagger
  * paths:
- * /auth/logout:
- *   post:
- *     summary: User logout
- *     description: Logs the user out by invalidating their authentication token.
- *     tags:
- *       - Authentication
- *     security:
- *       - bearerAuth: [] # Assuming you're using Bearer Token authentication
- *     responses:
- *       '200':
- *         description: Successful logout.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Confirmation message.
- *                   example: "Logout successful."
- *       '401':
- *         description: Unauthorized - user is not logged in or token is invalid.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error details.
- *                   example: "Invalid or missing authentication token."
- *       '500':
- *         description: Server error - an issue occurred during the logout process.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Details of the server error.
- *                   example: "Internal server error."
+ *   /auth/logout:
+ *     post:
+ *       summary: User logout
+ *       description: Logs the user out by invalidating their authentication token.
+ *       tags:
+ *         - Authentication
+ *       security:
+ *         - bearerAuth: [] # Assuming you're using Bearer Token authentication
+ *       responses:
+ *         '200':
+ *           description: Successful logout.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *                     description: Confirmation message.
+ *                     example: "Logout successful."
+ *         '401':
+ *           description: Unauthorized - user is not logged in or token is invalid.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   error:
+ *                     type: string
+ *                     description: Error details.
+ *                     example: "Invalid or missing authentication token."
+ *         '500':
+ *           description: Server error - an issue occurred during the logout process.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   error:
+ *                     type: string
+ *                     description: Details of the server error.
+ *                     example: "Internal server error."
  */
 authRouter.post('/logout',authMiddleware,Logout)
 export default authRouter

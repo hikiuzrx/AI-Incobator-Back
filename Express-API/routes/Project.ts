@@ -5,47 +5,64 @@ const projectRouter :Router= express.Router()
 /**
  * @swagger
  * paths:
- * /projects/dashboard:
- *   get:
- *     summary: Get all projects of a user
- *     description: Retrieve all projects associated with a specific user.
- *     tags:
- *       - Projects
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       '200':
- *         description: Successfully retrieved user's projects.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
+ *   /projects/dashboard:
+ *     get:
+ *       summary: Get all projects of a user
+ *       description: Retrieve all projects associated with a specific user.
+ *       tags:
+ *         - Projects
+ *       security:
+ *         - bearerAuth: [] # Using Bearer token for authentication
+ *       responses:
+ *         '200':
+ *           description: Successfully retrieved user's projects.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "proj123"
+ *                     name:
+ *                       type: string
+ *                       example: "Project Alpha"
+ *                     description:
+ *                       type: string
+ *                       example: "A project to explore new ideas."
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2024-12-01T10:00:00Z"
+ *         '401':
+ *           description: Unauthorized - user is not authenticated.
+ *           content:
+ *             application/json:
+ *               schema:
  *                 type: object
  *                 properties:
- *                   id:
+ *                   error:
  *                     type: string
- *                     example: "proj123"
- *                   name:
+ *                     example: "Unauthorized access."
+ *         '500':
+ *           description: Server error - something went wrong on the server.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   error:
  *                     type: string
- *                     example: "Project Alpha"
- *                   description:
- *                     type: string
- *                     example: "A project to explore new ideas."
- *                   createdAt:
- *                     type: string
- *                     format: date-time
- *                     example: "2024-12-01T10:00:00Z"
- *       '401':
- *         description: Unauthorized - user is not authenticated.
- *       '500':
- *         description: Server error.
- *
+ *                     example: "Internal server error."
  */
+
 projectRouter.get('/dashboard',ProjectsOfUser)
 /**
  * @swagger
- *  post:
+ * /projects:
+ *   post:
  *     summary: Create a new project
  *     description: Create a new project for a user.
  *     tags:
@@ -85,12 +102,37 @@ projectRouter.get('/dashboard',ProjectsOfUser)
  *                   type: string
  *                   example: "Project created successfully."
  *       '400':
- *         description: Invalid input data.
+ *         description: Invalid input data - missing or incorrect project details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid project data provided. Ensure that name and description are valid."
  *       '401':
- *         description: Unauthorized - user is not authenticated.
+ *         description: Unauthorized - user is not authenticated or lacks permission.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized access. Please log in to create a project."
  *       '500':
- *         description: Server error.
+ *         description: Server error - something went wrong while creating the project.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error. Please try again later."
  */
+
 projectRouter.post('dashboard',createProject)
 /**
  * @swagger
@@ -131,17 +173,43 @@ projectRouter.post('dashboard',createProject)
  *                   type: string
  *                   format: date-time
  *                   example: "2024-12-01T10:00:00Z"
- *       '404':
- *         description: Project not found.
  *       '401':
  *         description: Unauthorized - user is not authenticated.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized access. Please log in."
+ *       '404':
+ *         description: Project not found - no project with the given ID exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Project not found with the provided ID."
  *       '500':
- *         description: Server error.
+ *         description: Server error - something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error. Please try again later."
  */
+
 projectRouter.get('/:id',selectProject)
 /**
  * @swagger
- *  put:
+ * /projects/{id}:
+ *   put:
  *     summary: Update a project
  *     description: Update the details of a specific project by its ID.
  *     tags:
@@ -186,18 +254,51 @@ projectRouter.get('/:id',selectProject)
  *                   type: string
  *                   example: "Project updated successfully."
  *       '400':
- *         description: Invalid input data.
+ *         description: Invalid input data - some fields may be missing or incorrectly formatted.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid input data. Ensure all required fields are provided."
  *       '404':
- *         description: Project not found.
+ *         description: Project not found - no project with the given ID exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Project not found with the provided ID."
  *       '401':
- *         description: Unauthorized - user is not authenticated.
+ *         description: Unauthorized - user is not authenticated or does not have permission to update this project.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized access. Please log in."
  *       '500':
- *         description: Server error.
+ *         description: Server error - something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error. Please try again later."
  */
 projectRouter.put('/:id',updateProject!)
 /**
  * @swagger
- * delete:
+ * /projects/{id}:
+ *   delete:
  *     summary: Delete a project
  *     description: Delete a specific project by its ID.
  *     tags:
@@ -223,12 +324,37 @@ projectRouter.put('/:id',updateProject!)
  *                 message:
  *                   type: string
  *                   example: "Project deleted successfully."
- *       '404':
- *         description: Project not found.
  *       '401':
- *         description: Unauthorized - user is not authenticated.
+ *         description: Unauthorized - user is not authenticated or does not have permission to delete this project.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized access. Please log in or check your permissions."
+ *       '404':
+ *         description: Project not found - no project with the given ID exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Project not found with the provided ID."
  *       '500':
- *         description: Server error.
+ *         description: Server error - something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error. Please try again later."
  */
+
 projectRouter.delete('/:id',deleteProject)
 export default projectRouter

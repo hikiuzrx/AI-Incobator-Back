@@ -58,7 +58,8 @@ const userRouter:Router = express.Router()
 userRouter.get('/:id',getUser)
 /**
  * @swagger
- * put:
+ * /users/{id}:
+ *   put:
  *     summary: Update user details
  *     description: Update the details of an existing user by their unique ID.
  *     parameters:
@@ -75,12 +76,17 @@ userRouter.get('/:id',getUser)
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - name
+ *               - email
  *             properties:
  *               name:
  *                 type: string
+ *                 description: The name of the user.
  *                 example: "Jane Doe"
  *               email:
  *                 type: string
+ *                 description: The email address of the user.
  *                 example: "jane.doe@example.com"
  *     responses:
  *       '200':
@@ -94,7 +100,7 @@ userRouter.get('/:id',getUser)
  *                   type: string
  *                   example: "User updated successfully."
  *       '400':
- *         description: Bad request - invalid data.
+ *         description: Bad request - invalid data or missing required fields.
  *         content:
  *           application/json:
  *             schema:
@@ -102,7 +108,7 @@ userRouter.get('/:id',getUser)
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "Invalid user data."
+ *                   example: "Invalid user data. Ensure all required fields are provided."
  *       '404':
  *         description: User not found.
  *         content:
@@ -114,7 +120,7 @@ userRouter.get('/:id',getUser)
  *                   type: string
  *                   example: "User not found."
  *       '500':
- *         description: Server error.
+ *         description: Server error - something went wrong on the server.
  *         content:
  *           application/json:
  *             schema:
@@ -122,12 +128,14 @@ userRouter.get('/:id',getUser)
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "Internal server error."
+ *                   example: "Internal server error. Please try again later."
  */
+
 userRouter.put('/:id',UpdateUser)
 /**
  * @swagger
- *  delete:
+ * /users/{id}:
+ *   delete:
  *     summary: Delete a user
  *     description: Delete a user by their unique ID.
  *     parameters:
@@ -158,9 +166,9 @@ userRouter.put('/:id',UpdateUser)
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "User not found."
+ *                   example: "User not found. The specified user does not exist."
  *       '500':
- *         description: Server error.
+ *         description: Server error - something went wrong on the server.
  *         content:
  *           application/json:
  *             schema:
@@ -168,7 +176,7 @@ userRouter.put('/:id',UpdateUser)
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "Internal server error."
+ *                   example: "Internal server error. Please try again later."
  */
 userRouter.delete('/:id',DeleteUser)
 export default userRouter
