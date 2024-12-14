@@ -1,5 +1,6 @@
-import swaggerJSDoc from "swagger-jsdoc";
 import { SwaggerOptions } from "swagger-ui-express";
+
+import swaggerJsdoc from 'swagger-jsdoc';
 
 const swaggerOptions: SwaggerOptions = {
   definition: {
@@ -12,20 +13,10 @@ const swaggerOptions: SwaggerOptions = {
     servers: [
       {
         url: `http://localhost:${process.env.PORT}`, // Change this to your server's base URL
-        description: 'Development server',
       },
     ],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-        },
-      },
-    },
-    security: [{ bearerAuth: [] }],
   },
-  apis: ['./routes/*.ts'], // Path to your route files
+  apis: ['./dist/routes/*.js'], // Path to your route files
 };
-export default swaggerOptions;
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+export default swaggerDocs
