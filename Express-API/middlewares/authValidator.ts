@@ -48,9 +48,10 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
     });
 
     // Set the new access token in the response header
-    res.setHeader('Authorization', `Bearer ${newAccessToken}`);
+   
 
     req.userId = Number(decoded.userId);
+    req.accessToken = newAccessToken
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Invalid refresh token' });

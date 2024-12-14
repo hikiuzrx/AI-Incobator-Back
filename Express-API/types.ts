@@ -7,7 +7,8 @@ type AuthenticatedUser = {
      accessToken :string
    }
 export interface AuthRequest extends Request {
-     userId?:number 
+     userId?:number,
+     accessToken?:string
 }
 export  interface DecodedToken {
      userId: string |number

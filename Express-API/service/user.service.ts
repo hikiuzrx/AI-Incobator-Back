@@ -36,7 +36,7 @@ export async function  retriveUserByUsername(username : string ):Promise<User>{
      }
      return user
    }
-export async function UpdateUser(id:number, updateData :updateData ) {
+export async function updateUser(id:number, updateData :updateData ) {
      switch (updateData[0]){
      case 'fullName':
      var user:User|null = await db.user.findUnique({
